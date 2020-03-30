@@ -1,9 +1,8 @@
-package com.realmo.notification
+package com.realmo.notification.ui.activity
 
 
 import android.app.Notification
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -15,19 +14,29 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.databinding.DataBindingUtil
+import com.realmo.notification.R
+import com.realmo.notification.databinding.ActivityMainBinding
+import com.realmo.notification.service.RealMoNotificationListenerService
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         Log.d("realmo","MainActivity onCreate:"+android.os.Process.myPid())
+        val mainBinding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        EventBus.getDefault().register(this)
+
         if (!isNotificationListenerEnabled(this)){
             openNotificationListenSettings();
         }
 
         sendNormal()
+
+
     }
 
 
@@ -109,6 +118,16 @@ class MainActivity : AppCompatActivity() {
         val notification: Notification = builder.build()
         //3.通过manager发通知　
         manager.notify(100, notification)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe
+    public fun test(text : String){
+
     }
 
 }

@@ -1,4 +1,4 @@
-package com.realmo.notification
+package com.realmo.notification.service
 
 import android.app.NotificationManager
 import android.content.Context
