@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.databinding.ObservableField
 import com.realmo.notification.model.NotificationBean
 import com.realmo.notification.utils.parseToNotificationBean
+import org.greenrobot.eventbus.EventBus
 
 /**
  * @name RealMoNotification
@@ -17,6 +18,8 @@ import com.realmo.notification.utils.parseToNotificationBean
  * @version 1.0.0
  * @time 2020/3/27 9:30
  * @describe
+ *
+ * Android利用NotificationListenerService实现消息盒子功能_移动开发_Vanswells的博客-CSDN博客  https://blog.csdn.net/Vanswells/article/details/81033280
  */
 class RealMoNotificationListenerService : NotificationListenerService() {
 
@@ -30,14 +33,17 @@ class RealMoNotificationListenerService : NotificationListenerService() {
         super.onCreate()
         Log.d("momo","oncreate")
         instance = this
+        //TODO Android8.0获取的size是0，应该需要系统签名
         val activeNotifications = getActiveNotifications()
+        Log.d("momo","size:"+activeNotifications.size)
         activeNotifications?.forEach {
             val notificationBean = parseToNotificationBean(it)
             if(notificationBean != null){
                 currentNotifications.get()?.put(notificationBean.id,notificationBean)
+                Log.d("momo","bean:"+currentNotifications.toString())
             }
         }
-
+        EventBus.getDefault().post(currentNotifications.get())
     }
 
     override fun onDestroy() {
@@ -54,6 +60,7 @@ class RealMoNotificationListenerService : NotificationListenerService() {
         if(notificationBean != null){
             Log.d("momo","onNotificationPosted")
             currentNotifications.get()?.put(notificationBean.id,notificationBean)
+            EventBus.getDefault().post(currentNotifications.get())
         }
     }
 
@@ -64,6 +71,7 @@ class RealMoNotificationListenerService : NotificationListenerService() {
         if(notificationBean != null){
             Log.d("momo","onNotificationRemoved")
             currentNotifications.get()?.remove(notificationBean.id)
+            EventBus.getDefault().post(currentNotifications.get())
         }
     }
 

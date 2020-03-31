@@ -27,12 +27,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("realmo","MainActivity onCreate:"+android.os.Process.myPid())
+        Log.d("momo","MainActivity onCreate:"+android.os.Process.myPid())
         val mainBinding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         if (!isNotificationListenerEnabled(this)){
             openNotificationListenSettings();
         }
+        toggleNotificationListenerService()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("momo","onresume")
         //模拟发通知
         sendNormal()
     }
@@ -96,7 +103,7 @@ class MainActivity : AppCompatActivity() {
             .setContentTitle("Content title...")
         //设置通知铃声……
         builder.setDefaults(Notification.DEFAULT_ALL)
-
+        builder.setChannelId("momo")
 
         //跳转到指定的Activity
         val intent = Intent(this, TestActivity::class.java)

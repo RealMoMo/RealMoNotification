@@ -1,6 +1,7 @@
 package com.realmo.notification.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,6 +57,7 @@ class NotificationFragment : Fragment(){
     private fun subscribeUi(adapter: NotificationAdapter) {
         //需要配置kotlin jvm为1.8以上
         viewModel.notifications.observe(viewLifecycleOwner) {
+            Log.d("momo","observe")
             adapter.submitList(it.values.toMutableList())
         }
     }
