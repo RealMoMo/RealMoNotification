@@ -1,6 +1,5 @@
 package com.realmo.notification.ui.activity
 
-
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,26 +8,21 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
 import com.realmo.notification.R
-import com.realmo.notification.databinding.ActivityMainBinding
+import com.realmo.notification.databinding.ActivityTestBinding
 import com.realmo.notification.service.RealMoNotificationListenerService
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
 
-
-class MainActivity : AppCompatActivity() {
+class TestActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("realmo","MainActivity onCreate:"+android.os.Process.myPid())
-        val mainBinding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        DataBindingUtil.setContentView<ActivityTestBinding>(this,R.layout.activity_test)
 
         if (!isNotificationListenerEnabled(this)){
             openNotificationListenSettings();
@@ -36,7 +30,6 @@ class MainActivity : AppCompatActivity() {
         //模拟发通知
         sendNormal()
     }
-
 
     //检测通知监听服务是否被授权
     fun isNotificationListenerEnabled(context: Context): Boolean {
@@ -96,7 +89,7 @@ class MainActivity : AppCompatActivity() {
             .setContentTitle("Content title...")
         //设置通知铃声……
         builder.setDefaults(Notification.DEFAULT_ALL)
-
+        builder.setChannelId("normal")
 
         //跳转到指定的Activity
         val intent = Intent(this, TestActivity::class.java)
@@ -117,5 +110,4 @@ class MainActivity : AppCompatActivity() {
         //3.通过manager发通知　
         manager.notify(100, notification)
     }
-
 }
