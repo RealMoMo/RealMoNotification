@@ -19,7 +19,6 @@ import org.greenrobot.eventbus.EventBus
  * @time 2020/3/27 9:30
  * @describe
  *
- * Android利用NotificationListenerService实现消息盒子功能_移动开发_Vanswells的博客-CSDN博客  https://blog.csdn.net/Vanswells/article/details/81033280
  */
 class RealMoNotificationListenerService : NotificationListenerService() {
 
@@ -35,7 +34,13 @@ class RealMoNotificationListenerService : NotificationListenerService() {
         instance = this
         //TODO Android8.0获取的size是0，应该需要系统签名
         val activeNotifications = getActiveNotifications()
-        Log.d("momo","size:"+activeNotifications.size)
+        activeNotifications.isEmpty().let {
+            if(it){
+                Log.d("momo","isEmpty")
+            }else{
+                Log.d("momo","size:"+activeNotifications.size)
+            }
+        }
         activeNotifications?.forEach {
             val notificationBean = parseToNotificationBean(it)
             if(notificationBean != null){

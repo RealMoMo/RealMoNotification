@@ -2,6 +2,7 @@ package com.realmo.notification.ui.activity
 
 
 import android.app.Notification
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.ComponentName
@@ -94,6 +95,14 @@ class MainActivity : AppCompatActivity() {
 //1.获取NotificationManager
         val manager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            val channel = NotificationChannel("momo", "realmo", NotificationManager.IMPORTANCE_DEFAULT)
+            manager.createNotificationChannel(channel)
+        }
+
+
         //2.创建Notification对象
         val builder = NotificationCompat.Builder(this)
         //设置小图标,必须设置SmallIcon和Ticker否则不弹出通知
